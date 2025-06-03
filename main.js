@@ -98,11 +98,11 @@ function showResult() {
   let summary = '';
   
   if (maxCategory === 'ambiental') {
-    summary = "Você é um **Cidadão Ambiental**! Preocupa-se com a preservação da natureza e adota hábitos sustentáveis.";
+    summary = "Você é um <strong>Cidadão Ambiental</strong>! Preocupa-se com a preservação da natureza e adota hábitos sustentáveis.";
   } else if (maxCategory === 'social') {
-    summary = "Você é um **Cidadão Social**! Atua na promoção da justiça social, ajudando na construção de uma sociedade mais igualitária.";
+    summary = "Você é um <strong>Cidadão Social</strong>! Atua na promoção da justiça social, ajudando na construção de uma sociedade mais igualitária.";
   } else {
-    summary = "Você é um **Cidadão Cultural**! Valoriza tradições, arte e cultura, promovendo a diversidade e a identidade cultural.";
+    summary = "Você é um <strong>Cidadão Cultural</strong>! Valoriza tradições, arte e cultura, promovendo a diversidade e a identidade cultural.";
   }
   
   result.innerHTML = `<h2>Resultado:</h2><p>${summary}</p>`;
