@@ -1,111 +1,122 @@
 const quizData = [
-  {
-    question: "O que você faz com o lixo reciclável?",
-    options: [
-      { text: "Separo e levo para reciclagem", category: "ambiental" },
-      { text: "Jogo tudo no mesmo saco", category: "social" },
-      { text: "Procuro reutilizar para artesanato", category: "cultural" }
-    ]
-  },
-  {
-    question: "Como você costuma se deslocar pela cidade?",
-    options: [
-      { text: "Prefiro transporte coletivo ou bicicleta", category: "ambiental" },
-      { text: "Uso carro, mas ofereço carona", category: "social" },
-      { text: "Ando bastante a pé para conhecer o ambiente", category: "cultural" }
-    ]
-  },
-  {
-    question: "Em relação a causas sociais, você:",
-    options: [
-      { text: "Participa de ações comunitárias", category: "social" },
-      { text: "Divulga informações e mobiliza amigos", category: "cultural" },
-      { text: "Procura doar roupas e alimentos", category: "ambiental" }
-    ]
-  },
-  {
-    question: "Qual seu passatempo preferido?",
-    options: [
-      { text: "Cuidar do jardim ou da natureza", category: "ambiental" },
-      { text: "Participar de movimentos sociais", category: "social" },
-      { text: "Visitar museus ou eventos culturais", category: "cultural" }
-    ]
-  },
-  {
-    question: "Como você contribui para um mundo melhor?",
-    options: [
-      { text: "Reduzindo meu consumo", category: "ambiental" },
-      { text: "Defendendo direitos humanos", category: "social" },
-      { text: "Preservando tradições culturais", category: "cultural" }
-    ]
-  }
+    {
+        question: "1. Você evita consumir produtos de empresas que prejudicam o meio ambiente?",
+        options: ["Sempre", "Às vezes", "Nunca"],
+        scores: [3, 2, 0]
+    },
+    {
+        question: "2. Participa de campanhas sociais ou culturais?",
+        options: ["Frequentemente", "Raramente", "Nunca"],
+        scores: [3, 1, 0]
+    },
+    {
+        question: "3. Separar lixo reciclável é uma prática em sua casa?",
+        options: ["Sim, sempre", "Às vezes", "Não faço isso"],
+        scores: [3, 2, 0]
+    },
+    {
+        question: "4. Consome produtos de pequenos produtores ou artesãos locais?",
+        options: ["Sim, valorizo muito", "De vez em quando", "Não me preocupo com isso"],
+        scores: [3, 2, 0]
+    },
+    {
+        question: "5. O que você pensa sobre mudanças climáticas?",
+        options: ["É urgente agir", "Talvez seja exagero", "Não acredito nisso"],
+        scores: [3, 1, 0]
+    },
+    {
+        question: "6. Você evita o desperdício de água e energia?",
+        options: ["Sempre", "Às vezes", "Não me preocupo com isso"],
+        scores: [3, 2, 0]
+    },
+    {
+        question: "7. Participa de ações de voluntariado?",
+        options: ["Sim, regularmente", "Às vezes", "Nunca participei"],
+        scores: [3, 2, 0]
+    },
+    {
+        question: "8. Você procura se informar sobre questões sociais e ambientais?",
+        options: ["Sim, estou sempre atento(a)", "De vez em quando", "Não ligo muito para isso"],
+        scores: [3, 2, 0]
+    }
 ];
 
 let currentQuestion = 0;
-const answersCount = {
-  ambiental: 0,
-  social: 0,
-  cultural: 0
-};
+let totalScore = 0;
 
-const quiz = document.getElementById('quiz');
-const nextBtn = document.getElementById('next-btn');
-const result = document.getElementById('result');
+const quizContainer = document.getElementById('quiz');
+const nextButton = document.getElementById('next');
+const resultContainer = document.getElementById('result');
+const progressContainer = document.getElementById('progress');
+const restartButton = document.getElementById('restart');
 
 function loadQuestion() {
-  const q = quizData[currentQuestion];
-  quiz.innerHTML = `<h2>${q.question}</h2>`;
-  
-  q.options.forEach((opt, index) => {
-    const div = document.createElement('div');
-    div.classList.add('option');
-    div.innerText = opt.text;
-    div.addEventListener('click', () => selectOption(div, opt.category));
-    quiz.appendChild(div);
-  });
-}
-
-function selectOption(selectedDiv, category) {
-  document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
-  selectedDiv.classList.add('selected');
-  
-  nextBtn.onclick = () => {
-    answersCount[category]++;
-    currentQuestion++;
+    const q = quizData[currentQuestion];
+    quizContainer.innerHTML = `<h2>${q.question}</h2>`;
     
-    if (currentQuestion < quizData.length) {
-      loadQuestion();
-    } else {
-      showResult();
-    }
-  };
-}
+    q.options.forEach((option, index) => {
+        quizContainer.innerHTML += `
+            <label>
+                <input type="radio" name="answer" value="${index}">
+                ${option}
+            </label><br>
+        `;
+    });
 
-function showResult() {
-  quiz.style.display = 'none';
-  nextBtn.style.display = 'none';
-  
-  let maxCategory = '';
-  let maxCount = 0;
-  
-  for (let cat in answersCount) {
-    if (answersCount[cat] > maxCount) {
-      maxCount = answersCount[cat];
-      maxCategory = cat;
-    }
-  }
-  
-  let summary = '';
-  
-  if (maxCategory === 'ambiental') {
-    summary = "Você é um <strong>Cidadão Ambiental</strong>! Preocupa-se com a preservação da natureza e adota hábitos sustentáveis.";
-  } else if (maxCategory === 'social') {
-    summary = "Você é um <strong>Cidadão Social</strong>! Atua na promoção da justiça social, ajudando na construção de uma sociedade mais igualitária.";
-  } else {
-    summary = "Você é um <strong>Cidadão Cultural</strong>! Valoriza tradições, arte e cultura, promovendo a diversidade e a identidade cultural.";
-  }
-  
-  result.innerHTML = `<h2>Resultado:</h2><p>${summary}</p>`;
+    progressContainer.innerText = `Pergunta ${currentQuestion + 1} de ${quizData.length}`;
 }
 
 loadQuestion();
+
+nextButton.addEventListener('click', () => {
+    const answer = document.querySelector('input[name="answer"]:checked');
+    if (!answer) {
+        alert('Por favor, selecione uma opção!');
+        return;
+    }
+
+    const selected = parseInt(answer.value);
+    totalScore += quizData[currentQuestion].scores[selected];
+    
+    currentQuestion++;
+    
+    if (currentQuestion < quizData.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+});
+
+function showResult() {
+    quizContainer.style.display = 'none';
+    nextButton.style.display = 'none';
+    progressContainer.style.display = 'none';
+    restartButton.style.display = 'inline-block';
+
+    let message = '';
+
+    if (totalScore >= 20) {
+        message = "Parabéns! Você possui uma **alta consciência social e ambiental**.";
+    } else if (totalScore >= 12) {
+        message = "Você está no **caminho certo**! Ainda pode melhorar sua atuação social e ambiental.";
+    } else {
+        message = "Atenção! Reflita mais sobre como suas atitudes **impactam** a sociedade e o meio ambiente.";
+    }
+
+    resultContainer.innerHTML = `
+        <h2>Resultado</h2>
+        <p>${message}</p>
+        <p>Sua pontuação: ${totalScore}</p>
+    `;
+}
+
+restartButton.addEventListener('click', () => {
+    currentQuestion = 0;
+    totalScore = 0;
+    quizContainer.style.display = 'block';
+    nextButton.style.display = 'inline-block';
+    progressContainer.style.display = 'block';
+    resultContainer.innerHTML = '';
+    restartButton.style.display = 'none';
+    loadQuestion();
+});
